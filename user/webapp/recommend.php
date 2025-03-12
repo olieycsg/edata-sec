@@ -1,8 +1,8 @@
 <?php 
 
-/*ini_set('log_errors', 1);
+ini_set('log_errors', 1);
 ini_set('error_log', 'error.log');
-error_reporting(E_ALL);*/
+error_reporting(E_ALL);
 
 session_start();
 date_default_timezone_set("Asia/Kuala_Lumpur");
@@ -39,6 +39,15 @@ if($row1 = $result1->fetch_assoc()){
       $sql3 = "SELECT * FROM eleave WHERE CNOEE IN ($cnoehList) AND MNOTES = 'recommended' ORDER BY DLEAVE ASC";
       $result3 = $conn->query($sql3);
 
+      /*$sql2 = "SELECT * FROM employees_demas WHERE DRESIGN = '0000-00-00' AND CDIVISION = '$divi'";
+      $result2 = $conn->query($sql2);
+
+      foreach ($result2 as $key2 => $val2) { $cnoeh[] = $val2['CNOEE']; }
+
+      $cnoehList = "'".implode("','", $cnoeh)."'";
+      $sql3 = "SELECT * FROM eleave WHERE CNOEE IN ($cnoehList) AND MNOTES = 'recommended' ORDER BY DLEAVE ASC";
+      $result3 = $conn->query($sql3);
+
       $sql2 = "SELECT * FROM employees_demas WHERE CSUPERIOR = CSUPERVISO AND DRESIGN = '0000-00-00' AND CDIVISION = '$divi'";
       $result2 = $conn->query($sql2);
 
@@ -46,7 +55,7 @@ if($row1 = $result1->fetch_assoc()){
 
       $cnoehList = "'".implode("','", $cnoeh)."'";
       $sql3 = "SELECT * FROM eleave WHERE CNOEE IN ($cnoehList) AND MNOTES = 'pending' ORDER BY DLEAVE ASC";
-      $result3 = $conn->query($sql3);
+      $result3 = $conn->query($sql3);*/
     }
   }else{
     $cstat = 0;

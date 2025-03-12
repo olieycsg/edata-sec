@@ -116,7 +116,7 @@ if($emid == '2522-186'){
                           <div class="col-6">
                             <div class="form-group">
                               <div class="form-control-wrap">
-                                <select id="select_year" class="js-select" data-search="true" data-sort="false">
+                                <select id="select_year" class="js-select">
                                   <?php for ($y = date("Y") + 1; $y >= date("Y") - 3; $y--) { ?>
                                     <option value="<?php echo $y; ?>" <?php if ($y == date('Y')) { echo "selected"; } ?>><?php echo $y; ?></option>
                                   <?php } ?>

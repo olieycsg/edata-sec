@@ -1,5 +1,9 @@
 <?php
 
+/*ini_set('log_errors', 1);
+ini_set('error_log', 'error.log');
+error_reporting(E_ALL);*/
+
 date_default_timezone_set("Asia/Kuala_Lumpur");
 
 include('../../api.php');
@@ -77,7 +81,11 @@ foreach ($result5 as $key5 => $value5) {
 
   if($year == date('Y', strtotime($value5['DHIRE']))){
     if(date('d', strtotime($value5['DHIRE'])) == '01'){
-      $month = 13 - date('m', strtotime($value5['DHIRE'])); 
+      if(date('m', strtotime($value5['DHIRE'])) == date("m")){
+        $month = 0;
+      }else{
+        $month = 13 - date('m', strtotime($value5['DHIRE'])); 
+      }
     }else{
       $finalMonth = date('m') - date('m', strtotime($value5['DHIRE']));
       if($finalMonth > 0){
@@ -96,26 +104,41 @@ foreach ($result5 as $key5 => $value5) {
     if($month >= 60){
       $entcf = 30;
       if($year == date('Y')){
-        $currMonth = date("m") - 1;
-        $entitle = number_format((float)$currMonth * (30/12), 2, '.', ',');
+        $entitle = number_format((float)(date("m") - 1) * (30/12), 2, '.', ',');
       }else{
         if ($month > 59 && $month < 71) {
           $new = ($month - 60) * (30/12);
           $old = (12 - ($month - 60)) * (24/12);
           $entitle = number_format((float)$new + $old, 2, '.', ',');
         }else{
-          $entitle = "30.00";
+          $entitle = 30;
         }
       }
     }else{
       $entcf = 24;
-      if($year == date('Y', strtotime($value5['DHIRE']))){
-        $entitle = number_format((float)$month * (24/12), 2, '.', ',');
-      }else if($year == date('Y')){
-        $currMonth = date("m") - 1;
-        $entitle = number_format((float)$currMonth * (24/12), 2, '.', ',');
+      if($year == date('Y', strtotime($value5['DHIRE'])) && $year != date('Y')){
+        $getMonth = date('m', strtotime($value5['DHIRE']));
+        if(date('d', strtotime($value5['DHIRE'])) == '01'){
+          $entitle = number_format((float)(13 - $getMonth) * (24/12), 2, '.', ',');
+        }else{
+          $entitle = number_format((float)(13 - ($getMonth + 1)) * (24/12), 2, '.', ',');
+        }
+      }else if($year != date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+         $entitle = number_format((float)(date("m") - 1) * (24/12), 2, '.', ',');
+      }else if($year == date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+        if($month < 1){
+          $entitle = 0;
+        }else{
+          if(date('d', strtotime($value5['DHIRE'])) == '01'){
+            $entitle = number_format((float)date("m") * (24/12), 2, '.', ',');
+          }else{
+            $entitle = number_format((float)(date("m") - 1) * (24/12), 2, '.', ',');
+          }
+        }
+      }else if($year < date('Y', strtotime($value5['DHIRE']))){
+        $entitle = 0;
       }else{
-        $entitle = "24.00";
+        $entitle = 24;
       }
     }
   }else if(in_array($value5['CGRADE'], $ngrade)){
@@ -130,18 +153,34 @@ foreach ($result5 as $key5 => $value5) {
           $old = (12 - ($month - 60)) * (14/12);
           $entitle = number_format((float)$new + $old, 2, '.', ',');
         }else{
-          $entitle = "21.00";
+          $entitle = 21;
         }
       }
     }else{
       $entcf = 14;
-      if($year == date('Y', strtotime($value5['DHIRE']))){
-        $entitle = number_format((float)$month * (14/12), 2, '.', ',');
-      }else if($year == date('Y')){
-        $currMonth = date("m") - 1;
-        $entitle = number_format((float)$currMonth * (14/12), 2, '.', ',');
+      if($year == date('Y', strtotime($value5['DHIRE'])) && $year != date('Y')){
+        $getMonth = date('m', strtotime($value5['DHIRE']));
+        if(date('d', strtotime($value5['DHIRE'])) == '01'){
+          $entitle = number_format((float)(13 - $getMonth) * (14/12), 2, '.', ',');
+        }else{
+          $entitle = number_format((float)(13 - ($getMonth + 1)) * (14/12), 2, '.', ',');
+        }
+      }else if($year != date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+         $entitle = number_format((float)(date("m") - 1) * (14/12), 2, '.', ',');
+      }else if($year == date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+        if($month < 1){
+          $entitle = 0;
+        }else{
+          if(date('d', strtotime($value5['DHIRE'])) == '01'){
+            $entitle = number_format((float)date("m") * (14/12), 2, '.', ',');
+          }else{
+            $entitle = number_format((float)(date("m") - 1) * (14/12), 2, '.', ',');
+          }
+        }
+      }else if($year < date('Y', strtotime($value5['DHIRE']))){
+        $entitle = 0;
       }else{
-        $entitle = "14.00";
+        $entitle = 14;
       }
     }
   }
@@ -162,6 +201,7 @@ if(($bfval - $entcf) > 0){
 }
 
 if($year >= date("Y", strtotime($hire))){
+
 ?>
 <div class="calendar-container">
   <div class="month-container">
@@ -175,9 +215,15 @@ if($year >= date("Y", strtotime($hire))){
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <b style="font-style: italic;  font-size: 13px;">In Service</b>
+          <?php if($_POST['year'] < date('Y', strtotime($hire))){ ?>
+          <span class="badge text-bg-success" style="font-style: italic;  font-size: 11px;" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" title="No Data">
+            <i class="fas fa-eye"></i> View 
+          </span>
+          <?php }else{ ?>
           <span class="badge text-bg-success" style="font-style: italic;  font-size: 11px;" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" title="<?php echo $years > 0 ? "$years years, $months months, $days days" : "$months months, $days days"; ?>">
             <i class="fas fa-eye"></i> View
           </span>
+          <?php } ?>
         </li>
       </ul>
     </div>
@@ -242,7 +288,7 @@ if($year >= date("Y", strtotime($hire))){
           $textDarkClass = $key2 == 1 ? 'text-dark' : '';
 
           foreach ($result3 as $key3 => $value3) {
-            if($value3['CCDLEAVE'] == $value2['ID'] && date("Y", strtotime($value3['DLEAVE'])) == $year){
+            if($value3['CCDLEAVE'] == $value2['ID'] && date("Y", strtotime($value3['DLEAVE'])) == $_POST['year']){
               $count[$key2][] = $value3['NDAYS'];
             }
           }

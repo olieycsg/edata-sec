@@ -125,7 +125,11 @@ if(date("Y") + 1 != $year){
 
     if($year == date('Y', strtotime($value5['DHIRE']))){
       if(date('d', strtotime($value5['DHIRE'])) == '01'){
-        $month = 13 - date('m', strtotime($value5['DHIRE'])); 
+        if(date('m', strtotime($value5['DHIRE'])) == date("m")){
+          $month = 0;
+        }else{
+          $month = 13 - date('m', strtotime($value5['DHIRE'])); 
+        }
       }else{
         $finalMonth = date('m') - date('m', strtotime($value5['DHIRE']));
         if($finalMonth > 0){
@@ -142,9 +146,9 @@ if(date("Y") + 1 != $year){
 
     if(!in_array($value5['CGRADE'], $ngrade)){
       if($month >= 60){
+        $entcf = 30;
         if($year == date('Y')){
-          $currMonth = date("m") - 1;
-          $entitle = number_format((float)$currMonth * (30/12), 2, '.', ',');
+          $entitle = number_format((float)(date("m") - 1) * (30/12), 2, '.', ',');
         }else{
           if ($month > 59 && $month < 71) {
             $new = ($month - 60) * (30/12);
@@ -155,17 +159,34 @@ if(date("Y") + 1 != $year){
           }
         }
       }else{
-        if($year == date('Y', strtotime($value5['DHIRE']))){
-          $entitle = number_format((float)$month * (24/12), 2, '.', ',');
-        }else if($year == date('Y')){
-          $currMonth = date("m") - 1;
-          $entitle = number_format((float)$currMonth * (24/12), 2, '.', ',');
+        if($year == date('Y', strtotime($value5['DHIRE'])) && $year != date('Y')){
+          $getMonth = date('m', strtotime($value5['DHIRE']));
+          if(date('d', strtotime($value5['DHIRE'])) == '01'){
+            $entitle = number_format((float)(13 - $getMonth) * (24/12), 2, '.', ',');
+          }else{
+            $entitle = number_format((float)(13 - ($getMonth + 1)) * (24/12), 2, '.', ',');
+          }
+        }else if($year != date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+           $entitle = number_format((float)(date("m") - 1) * (24/12), 2, '.', ',');
+        }else if($year == date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+          if($month < 1){
+            $entitle = 0;
+          }else{
+            if(date('d', strtotime($value5['DHIRE'])) == '01'){
+              $entitle = number_format((float)date("m") * (24/12), 2, '.', ',');
+            }else{
+              $entitle = number_format((float)(date("m") - 1) * (24/12), 2, '.', ',');
+            }
+          }
+        }else if($year < date('Y', strtotime($value5['DHIRE']))){
+          $entitle = 0;
         }else{
           $entitle = 24;
         }
       }
     }else if(in_array($value5['CGRADE'], $ngrade)){
       if($month >= 60){
+        $entcf = 21;
         if($year == date('Y')){
           $currMonth = date("m") - 1;
           $entitle = number_format((float)$currMonth * (21/12), 2, '.', ',');
@@ -179,11 +200,27 @@ if(date("Y") + 1 != $year){
           }
         }
       }else{
-        if($year == date('Y', strtotime($value5['DHIRE']))){
-          $entitle = number_format((float)$month * (14/12), 2, '.', ',');
-        }else if($year == date('Y')){
-          $currMonth = date("m") - 1;
-          $entitle = number_format((float)$currMonth * (14/12), 2, '.', ',');
+        if($year == date('Y', strtotime($value5['DHIRE'])) && $year != date('Y')){
+          $getMonth = date('m', strtotime($value5['DHIRE']));
+          if(date('d', strtotime($value5['DHIRE'])) == '01'){
+            $entitle = number_format((float)(13 - $getMonth) * (14/12), 2, '.', ',');
+          }else{
+            $entitle = number_format((float)(13 - ($getMonth + 1)) * (14/12), 2, '.', ',');
+          }
+        }else if($year != date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+           $entitle = number_format((float)(date("m") - 1) * (14/12), 2, '.', ',');
+        }else if($year == date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+          if($month < 1){
+            $entitle = 0;
+          }else{
+            if(date('d', strtotime($value5['DHIRE'])) == '01'){
+              $entitle = number_format((float)date("m") * (14/12), 2, '.', ',');
+            }else{
+              $entitle = number_format((float)(date("m") - 1) * (14/12), 2, '.', ',');
+            }
+          }
+        }else if($year < date('Y', strtotime($value5['DHIRE']))){
+          $entitle = 0;
         }else{
           $entitle = 14;
         }
@@ -219,7 +256,11 @@ if(date("Y") + 1 != $year){
 
     if($year == date('Y', strtotime($value5['DHIRE']))){
       if(date('d', strtotime($value5['DHIRE'])) == '01'){
-        $month = 13 - date('m', strtotime($value5['DHIRE'])); 
+        if(date('m', strtotime($value5['DHIRE'])) == date("m")){
+          $month = 0;
+        }else{
+          $month = 13 - date('m', strtotime($value5['DHIRE'])); 
+        }
       }else{
         $finalMonth = date('m') - date('m', strtotime($value5['DHIRE']));
         if($finalMonth > 0){
@@ -236,9 +277,9 @@ if(date("Y") + 1 != $year){
 
     if(!in_array($value5['CGRADE'], $ngrade)){
       if($month >= 60){
+        $entcf = 30;
         if($year == date('Y')){
-          $currMonth = date("m") - 1;
-          $entitle = number_format((float)$currMonth * (30/12), 2, '.', ',');
+          $entitle = number_format((float)(date("m") - 1) * (30/12), 2, '.', ',');
         }else{
           if ($month > 59 && $month < 71) {
             $new = ($month - 60) * (30/12);
@@ -249,17 +290,34 @@ if(date("Y") + 1 != $year){
           }
         }
       }else{
-        if($year == date('Y', strtotime($value5['DHIRE']))){
-          $entitle = number_format((float)$month * (24/12), 2, '.', ',');
-        }else if($year == date('Y')){
-          $currMonth = date("m") - 1;
-          $entitle = number_format((float)$currMonth * (24/12), 2, '.', ',');
+        if($year == date('Y', strtotime($value5['DHIRE'])) && $year != date('Y')){
+          $getMonth = date('m', strtotime($value5['DHIRE']));
+          if(date('d', strtotime($value5['DHIRE'])) == '01'){
+            $entitle = number_format((float)(13 - $getMonth) * (24/12), 2, '.', ',');
+          }else{
+            $entitle = number_format((float)(13 - ($getMonth + 1)) * (24/12), 2, '.', ',');
+          }
+        }else if($year != date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+           $entitle = number_format((float)(date("m") - 1) * (24/12), 2, '.', ',');
+        }else if($year == date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+          if($month < 1){
+            $entitle = 0;
+          }else{
+            if(date('d', strtotime($value5['DHIRE'])) == '01'){
+              $entitle = number_format((float)date("m") * (24/12), 2, '.', ',');
+            }else{
+              $entitle = number_format((float)(date("m") - 1) * (24/12), 2, '.', ',');
+            }
+          }
+        }else if($year < date('Y', strtotime($value5['DHIRE']))){
+          $entitle = 0;
         }else{
           $entitle = 24;
         }
       }
     }else if(in_array($value5['CGRADE'], $ngrade)){
       if($month >= 60){
+        $entcf = 21;
         if($year == date('Y')){
           $currMonth = date("m") - 1;
           $entitle = number_format((float)$currMonth * (21/12), 2, '.', ',');
@@ -273,11 +331,27 @@ if(date("Y") + 1 != $year){
           }
         }
       }else{
-        if($year == date('Y', strtotime($value5['DHIRE']))){
-          $entitle = number_format((float)$month * (14/12), 2, '.', ',');
-        }else if($year == date('Y')){
-          $currMonth = date("m") - 1;
-          $entitle = number_format((float)$currMonth * (14/12), 2, '.', ',');
+        if($year == date('Y', strtotime($value5['DHIRE'])) && $year != date('Y')){
+          $getMonth = date('m', strtotime($value5['DHIRE']));
+          if(date('d', strtotime($value5['DHIRE'])) == '01'){
+            $entitle = number_format((float)(13 - $getMonth) * (14/12), 2, '.', ',');
+          }else{
+            $entitle = number_format((float)(13 - ($getMonth + 1)) * (14/12), 2, '.', ',');
+          }
+        }else if($year != date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+           $entitle = number_format((float)(date("m") - 1) * (14/12), 2, '.', ',');
+        }else if($year == date('Y', strtotime($value5['DHIRE'])) && $year == date('Y')){
+          if($month < 1){
+            $entitle = 0;
+          }else{
+            if(date('d', strtotime($value5['DHIRE'])) == '01'){
+              $entitle = number_format((float)date("m") * (14/12), 2, '.', ',');
+            }else{
+              $entitle = number_format((float)(date("m") - 1) * (14/12), 2, '.', ',');
+            }
+          }
+        }else if($year < date('Y', strtotime($value5['DHIRE']))){
+          $entitle = 0;
         }else{
           $entitle = 14;
         }
@@ -711,7 +785,7 @@ $(document).ready(function(){
                   });
                 },
                 success: function(response) {
-                  window.location.href = 'leave_pending';
+                  window.location.href = 'over_leave_pending';
                 }
               });
             }
@@ -771,13 +845,13 @@ $(document).ready(function(){
 
 $(document).ready(function(){
   $(".delete_leave").click(function(){
-    window.location.href = 'leave_pending';
+    window.location.href = 'over_leave_pending';
   });
 });
 
 $(document).ready(function(){
   $(".delete_bulk_leave").click(function(){
-    window.location.href = 'leave_pending';
+    window.location.href = 'over_leave_pending';
   });
 });
 

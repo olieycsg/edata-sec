@@ -211,6 +211,11 @@ if($module == ''){
         if($module == 'reports'){ include("reports.php"); }
         $access = 1;
       }
+
+      if ($value['module'] == 10 && $value['status'] == '1') {
+        if($module == 'attendance'){ include("attendance.php"); }
+        $access = 1;
+      }
       
     }
 

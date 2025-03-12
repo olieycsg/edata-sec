@@ -3,9 +3,9 @@
 $sql = "SELECT * FROM module WHERE sid = '".$_SESSION['sid']."'";
 $result = $hris->query($sql);
 
-$upper = ["1" => "Employee", "2" => "Leave", "3" => "Payroll", "4" => "Medical", "5" => "Memo", "6" => "Training", "7" => "Performance", "8" => "System", "9" => "Reports"];
+$upper = ["1" => "Employee", "2" => "Leave", "3" => "Payroll", "4" => "Medical", "5" => "Memo", "6" => "Training", "7" => "Performance", "8" => "System", "9" => "Reports", "10" => "Attendance"];
 
-$lower = ["1" => "employee", "2" => "leave", "3" => "payroll", "4" => "medical", "5" => "memo", "6" => "training", "7" => "performance", "8" => "system", "9" => "reports"];
+$lower = ["1" => "employee", "2" => "leave", "3" => "payroll", "4" => "medical", "5" => "memo", "6" => "training", "7" => "performance", "8" => "system", "9" => "reports", "10" => "attendance"];
 
 ?>
 <header>
@@ -44,7 +44,7 @@ $lower = ["1" => "employee", "2" => "leave", "3" => "payroll", "4" => "medical",
       </li>
       <?php 
       foreach ($result as $key => $value) {
-        if ($value['module'] >= 8 && $value['module'] <= 9 && $value['status'] == '1' && isset($lower[$value['module']])) {
+        if ($value['module'] >= 8 && $value['module'] <= 10 && $value['status'] == '1' && isset($lower[$value['module']])) {
           $module_name = $lower[$value['module']];
 
       ?>

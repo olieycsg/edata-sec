@@ -14,6 +14,7 @@ declare(strict_types=1);
  * Needs to be a 32-bytes long string of random bytes. See FAQ 2.10.
  */
 $cfg['blowfish_secret'] = 'K@ouYYXT:f3*Xag]-p2Ld(G!PO+ERr!w';
+$cfg['TempDir'] = '/tmp';
 
 /**
  * Servers configuration
