@@ -3,9 +3,9 @@
 <head>
   <title>Sabah Energy</title>
   <meta charset="utf-8">
-  <meta name="author" content="Softnio">
+  <meta name="author" content="Sabah Energy">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="i-Sec System">
+  <meta name="description" content="System">
   <link rel="icon" type="image/x-icon" href="img/icon.png">
   <link rel="stylesheet" href="src/css/style.css?v1.1.1">
 </head>
@@ -39,6 +39,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-window.location.href = "https://sec-mis.com/";
+window.location.href = "https://sec-msi.com/";
 
 </script>

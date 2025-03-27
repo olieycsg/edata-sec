@@ -8,7 +8,6 @@ $r1 = $conn->query($s1);
 $s2 = "SELECT * FROM sys_general_dcmisc";
 $r2 = $conn->query($s2);
 
-
 ?>
 <div class="row">
   <div class="col-lg-12">
@@ -24,7 +23,6 @@ $r2 = $conn->query($s2);
                   $division = $v2['CDESC'];
                 }
               }
-
             ?>
             <option value="<?php echo $v1['CDIVISION']; ?>" data-mdb-icon="../img/icon.png"><?php echo $division; ?></option>
             <?php } ?>
@@ -62,7 +60,7 @@ $(document).ready(function() {
   $("#search").change(function(){
     var code = $(this).val();
     $.ajax({
-      url: 'modules/attendance/main',
+      url: 'modules/attendance/main?cdivi='+code,
       beforeSend: function() {    
         $('.loader').show();
         $('.no_data').hide();

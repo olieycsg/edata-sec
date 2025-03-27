@@ -1,9 +1,5 @@
 <?php
 
-/*ini_set('log_errors', 1);
-ini_set('error_log', 'error.log');
-error_reporting(E_ALL);*/
-
 date_default_timezone_set("Asia/Kuala_Lumpur");
 
 include('../../../api.php'); 
@@ -16,168 +12,19 @@ if (isset($_FILES["csvFile"]) && $_FILES["csvFile"]["error"] == 0) {
       rewind($handle);
     }
 
-    $row = 0;
-
-    while (($data = fgetcsv($handle, 10000000, ",")) !== FALSE) {
-      $row++;
-      if ($row < 3) continue;
-
-      $time = explode("-", $data[5]);
-      $name = trim($data[1]);
-      $date = date("Y-m-d", strtotime(str_replace("/", "-", $data[4])));
+    while (($data = fgetcsv($handle, 1000000, ",")) !== FALSE) {
+      $time = explode("-", $data[4]);
+      $name = $data[0]; 
+      $date = date("Y-m-d", strtotime(str_replace("/", "-", $data[3])));
       $cint = $time[0];
       $cout = $time[1];
-      $rang = $data[7];
 
-      $words = explode(' ', $name);
-      $likeConditions = array_map(fn($word) => "CNAME LIKE '%$word%'", $words);
-      $whereClause = implode(' AND ', $likeConditions);
-
-      $sql1 = "SELECT CNOEE, CDIVISION FROM employees_demas WHERE ($whereClause) AND DATE_FORMAT(DHIRE, '%Y-%m-%d') < DATE_FORMAT('$date', '%Y-%m-%d') AND DRESIGN = '0000-00-00'";
-      $result1 = $conn->query($sql1);
-      if ($row1 = $result1->fetch_assoc()) {
-        $cnoee = $row1['CNOEE'];
-        $cdivi = $row1['CDIVISION'];
-        $sql = "INSERT INTO attendance (cnoee, cdivi, edate, cint, cout, rang, type, remarks) VALUES ('$cnoee', '$cdivi', '$date', '$cint', '$cout', '$rang', '', '')";
-        $conn->query($sql);
-      }
+      $sql = "INSERT INTO attendance (name, edate, cint, cout, type, remarks) VALUES ('$name', '$date', '$cint', '$cout', '', '')";
+      $conn->query($sql);
     }
     fclose($handle);
   }
 }
-
-/*if (isset($_FILES["csvFile"]) && $_FILES["csvFile"]["error"] == 0) {
-    $filename = $_FILES["csvFile"]["tmp_name"];
-
-    if (($handle = fopen($filename, "r")) !== FALSE) {
-        $bom = fread($handle, 3);
-        if ($bom !== "\xEF\xBB\xBF") {
-            rewind($handle);
-        }
-
-        $row = 0;
-        $processedNames = []; // Track names that have been processed
-        $processedCdivi = []; // Track divisions for processed names
-
-        while (($data = fgetcsv($handle, 10000000, ",")) !== FALSE) {
-            $row++;
-            if ($row < 3) continue; // Skip the first two rows
-
-            $time = explode("-", $data[5]);
-            $name = trim($data[1]);
-            $date = date("Y-m-d", strtotime(str_replace("/", "-", $data[4])));
-            $cint = $time[0];
-            $cout = $time[1];
-
-            if (!isset($processedNames[$name])) {
-                $sql1 = "SELECT CNOEE, CDIVISION FROM employees_demas WHERE CNAME LIKE '%$name%' AND DRESIGN = '0000-00-00'";
-                $result1 = $conn->query($sql1);
-                if ($row1 = $result1->fetch_assoc()) {
-                    $cnoee = $row1['CNOEE'];
-                    $cdivi = $row1['CDIVISION'];
-                } else {
-                    $cnoee = ''; // Default if no match found
-                    $cdivi = '';
-                }
-                $processedNames[$name] = $cnoee;
-                $processedCdivi[$name] = $cdivi;
-            } else {
-                $cnoee = '';
-                $cdivi = '';
-            }
-
-            $sql = "INSERT INTO attendance (cnoee, cdivi, edate, cint, cout, type, remarks) 
-                    VALUES ('$cnoee', '$cdivi', '$date', '$cint', '$cout', '', '')";
-            $conn->query($sql);
-        }
-        fclose($handle);
-    }
-}*/
-
-/*if (isset($_FILES["csvFile"]) && $_FILES["csvFile"]["error"] == 0) {
-  $filename = $_FILES["csvFile"]["tmp_name"];
-  if (($handle = fopen($filename, "r")) !== FALSE) {
-    $bom = fread($handle, 3);
-    if ($bom !== "\xEF\xBB\xBF") {
-      rewind($handle);
-    }
-
-    $row = 0;
-    $dataList = [];
-    $datesArray = [];
-
-    while (($data = fgetcsv($handle, 10000000, ",")) !== FALSE) {
-      $row++;
-      if ($row < 3) continue;
-
-      $name = trim($data[1]);
-      $date = date("Y-m-d", strtotime(str_replace("/", "-", $data[4])));
-      $cint = isset($data[6]) ? trim($data[6]) : '';
-      $cout = isset($data[7]) ? trim($data[7]) : '';
-
-      if (!empty($name)) {
-        $dataList[] = [
-          'name' => $name,
-          'date' => $date,
-          'cint' => $cint,
-          'cout' => $cout
-        ];
-        $datesArray[] = $date;
-      }
-    }
-    fclose($handle);
-
-    if (!empty($datesArray)) {
-      sort($datesArray);
-      $firstDetectedDate = new DateTime(reset($datesArray));
-      $year = $firstDetectedDate->format("Y");
-
-      $startDate = new DateTime("$year-01-01");
-      $endDate = new DateTime(end($datesArray));
-    }
-
-    $allDates = [];
-    while ($startDate <= $endDate) {
-      $allDates[] = $startDate->format("Y-m-d");
-      $startDate->modify("+1 day");
-    }
-
-    $groupedData = [];
-    foreach ($dataList as $entry) {
-      $groupedData[$entry['name']][$entry['date']] = [
-        'cint' => $entry['cint'],
-        'cout' => $entry['cout']
-      ];
-    }
-
-    foreach ($groupedData as $name => $dates) {
-      foreach ($allDates as $date) {
-        if (!isset($dates[$date])) {
-          $dates[$date] = ['cint' => '', 'cout' => ''];
-        }
-      }
-
-      ksort($dates);
-      foreach ($dates as $date => $times) {
-        $safe_name = $conn->real_escape_string($name);
-        $safe_date = $conn->real_escape_string($date);
-        $safe_cint = $conn->real_escape_string($times['cint']);
-        $safe_cout = $conn->real_escape_string($times['cout']);
-
-        $sql1 = "SELECT CNOEE, CDIVISION FROM employees_demas WHERE REPLACE(CNAME, '@', '') LIKE '%$safe_name%' AND DRESIGN = '0000-00-00'";
-        $result1 = $conn->query($sql1);
-
-        if ($row1 = $result1->fetch_assoc()) {
-          $cnoee = $conn->real_escape_string($row1['CNOEE']);
-          $cdivi = $conn->real_escape_string($row1['CDIVISION']);
-
-          $sql2 = "INSERT INTO attendance (cnoee, cdivi, edate, cint, cout, type, remarks) VALUES ('$cnoee', '$cdivi', '$safe_date', '$safe_cint', '$safe_cout', '', '')";
-          $conn->query($sql2);
-        }
-      }
-    }
-  }
-}*/
 
 if(isset($_POST['delete'])){
   $sql = "DELETE FROM attendance";

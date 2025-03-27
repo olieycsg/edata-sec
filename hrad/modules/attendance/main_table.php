@@ -1,14 +1,10 @@
 <?php
 
-/*ini_set('log_errors', 1);
-ini_set('error_log', 'error.log');
-error_reporting(E_ALL);*/
-
 include('../../../api.php');
 
 $name = $_POST['name'];
 
-$sql = "SELECT * FROM attendance WHERE name = '$name'";
+$sql = "SELECT * FROM attendance WHERE cnoee = '$name' ORDER BY edate ASC";
 $result = $conn->query($sql);
 
 ?>
