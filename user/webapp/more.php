@@ -65,51 +65,64 @@ $r3 = $conn->query($s3);
   <?php include('navbar.php'); ?>
   <div class="container" style="margin-top: 80px; margin-bottom: 50px;">
     <div class="nk-content-body">
-    <div class="row">
-      <?php if ($r3->num_rows > 0 || (isset($_SESSION['emid']) && $_SESSION['emid'] == '2522-186')) { ?>
-      <div class="col-6">
-        <a href="over_leave" class="card load text-dark">
-          <div class="card-body text-center">
-            <h3 class="card-title"><i class="fas fa-calendar-check"></i></h3>
-            <b style="font-size: 15px;">Division (Leave)</b>
-            <br>
-            <b class="text-success" style="font-style: italic;">Access Granted</b>
+      <!-- <div class="row">
+        <div class="col-12">
+          <b onclick="location.reload()">Refresh Data</b>
+        </div>
+      </div>
+      <hr> -->
+      <div class="row" style="text-align: center;" style="margin-top: 50px;">
+        <?php if ($r3->num_rows > 0 || (isset($_SESSION['emid']) && $_SESSION['emid'] == '2522-186')) { ?>
+        <div class="col-3">
+          <div class="d-flex flex-column align-items-center position-relative load">
+            <a href="over_leave" class="btn btn-light position-relative new-bg" 
+               style="width: 60px; height: 60px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-calendar-check" style="font-size: 23px;"></i>
+            </a>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="font-size: 8px; margin-left: -5px;">New</span>
+            <small style="margin-top: 5px;"><b>Leave<br>(Secretary)</b></small>
           </div>
-        </a>
+        </div>
+        <?php } ?>
+        <?php if ($_SESSION['emid'] == '2522-186') { ?>
+        <div class="col-3">
+          <div class="d-flex flex-column align-items-center position-relative load">
+            <a href="attendance" class="btn btn-light position-relative new-bg" 
+               style="width: 60px; height: 60px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-calendar-check" style="font-size: 23px;"></i>
+            </a>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="font-size: 8px; margin-left: -5px;">New</span>
+            <small style="margin-top: 5px;"><b>Attendance<br>(Report)</b></small>
+          </div>
+        </div>
+        <?php } ?>
       </div>
       <?php if ($_SESSION['emid'] == '2522-186') { ?>
-      <div class="col-6">
-        <a href="https://secims.com/voting/vote_access?emid=<?php echo $_SESSION['emid']; ?>" class="card load text-dark">
-          <div class="card-body text-center">
-            <h3 class="card-title"><i class="fas fa-key"></i></h3>
-            <b style="font-size: 15px;">KSR (Access)</b>
-            <br>
-            <b class="text-success" style="font-style: italic;">Access Granted</b>
+      <hr>
+      <div class="row" style="text-align: center;">
+        <div class="col-3">
+          <div class="d-flex flex-column align-items-center position-relative load">
+            <a href="https://secims.com/voting/vote_access?emid=<?php echo $_SESSION['emid']; ?>" class="btn btn-light position-relative new-bg" 
+               style="width: 60px; height: 60px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-key" style="font-size: 23px;"></i>
+            </a>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="font-size: 8px; margin-left: -5px;">New</span>
+            <small style="margin-top: 5px;"><b>KSR<br>(Settings)</b></small>
           </div>
-        </a>
-      </div>
-      <div class="col-6" style="margin-top: 15px;">
-        <a href="https://secims.com/voting/vote_position?emid=<?php echo $_SESSION['emid']; ?>" class="card load text-dark">
-          <div class="card-body text-center">
-            <h3 class="card-title"><i class="fas fa-user-lock"></i></h3>
-            <b style="font-size: 15px;">KSR (Position)</b>
-            <br>
-            <b class="text-success" style="font-style: italic;">Access Granted</b>
-          </div>
-        </a>
-      </div>
-      <?php } }else{ ?>
-      <div class="col-6">
-        <div class="card">
-          <div class="card-body text-center">
-            <h3 class="card-title"><i class="fas fa-calendar-check"></i></h3>
-            <b style="font-size: 15px;">Division (Leave)</b>
-            <br>
-            <b class="text-danger" style="font-style: italic;">Secretary Only</b>
+        </div>
+        <div class="col-3">
+          <div class="d-flex flex-column align-items-center position-relative load">
+            <a href="https://secims.com/voting/vote_position?emid=<?php echo $_SESSION['emid']; ?>" class="btn btn-light position-relative new-bg" 
+               style="width: 60px; height: 60px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-user-lock" style="font-size: 23px;"></i>
+            </a>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="font-size: 8px; margin-left: -5px;">New</span>
+            <small style="margin-top: 5px;"><b>KSR<br>(Position)</b></small>
           </div>
         </div>
       </div>
       <?php } ?>
+      </div>
     </div>
   </div>
 </div>

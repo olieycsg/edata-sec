@@ -1,8 +1,8 @@
 <?php 
 
-/*ini_set('log_errors', 1);
+ini_set('log_errors', 1);
 ini_set('error_log', 'error.log');
-error_reporting(E_ALL);*/
+error_reporting(E_ALL);
 
 session_start();
 date_default_timezone_set("Asia/Kuala_Lumpur");
@@ -14,8 +14,6 @@ $year = date("Y");
 
 $sql = "SELECT * FROM employees_demas WHERE CNOEE = '$emid' AND DRESIGN = '0000-00-00'";
 $result = $conn->query($sql);
-
-$cnt = 0;
 
 if($row = $result->fetch_assoc()){
 
@@ -29,10 +27,12 @@ if($row = $result->fetch_assoc()){
   if($resulta->num_rows > 0) {
     $chead = 1;
     if($rowa = $resulta->fetch_assoc()){
-      $sql2 = "SELECT COUNT(eleave.ID) AS cnt FROM employees_demas LEFT JOIN eleave ON employees_demas.CNOEE = eleave.CNOEE WHERE employees_demas.DRESIGN = '0000-00-00' AND employees_demas.CDIVISION = '$divi' AND eleave.MNOTES = 'recommended' AND employees_demas.CSUPERVISO = '$head'";
+      $sql2 = "SELECT COUNT(eleave.ID) AS cnt FROM employees_demas LEFT JOIN eleave ON employees_demas.CNOEE = eleave.CNOEE WHERE employees_demas.DRESIGN = '0000-00-00' AND employees_demas.CDIVISION = '$divi' AND (eleave.MNOTES = 'recommended' OR (eleave.MNOTES = 'pending' AND employees_demas.CSUPERIOR = employees_demas.CSUPERVISO))";
       $result2 = $conn->query($sql2);
       if ($row2 = $result2->fetch_assoc()) {
         $cnt = $row2['cnt'];
+        $status = 1;
+        $shows = 1;
       }
     }
   }else{
@@ -42,12 +42,13 @@ if($row = $result->fetch_assoc()){
 
     if($row1 = $result1->fetch_assoc()){
       $cjob = $row1['CJOB'];
-      $cjob1 = $row1['CJOB1'];
 
-      $sql2 = "SELECT COUNT(eleave.ID) AS id FROM employees_demas LEFT JOIN eleave ON employees_demas.CNOEE = eleave.CNOEE AND eleave.MNOTES = 'pending' WHERE employees_demas.DRESIGN = '0000-00-00' AND (employees_demas.CSUPERIOR = '$cjob' OR employees_demas.CSUPERIOR = '$cjob1')";
+      $sql2 = "SELECT COUNT(eleave.ID) AS id FROM employees_demas LEFT JOIN eleave ON employees_demas.CNOEE = eleave.CNOEE AND eleave.MNOTES = 'pending' WHERE employees_demas.DRESIGN = '0000-00-00' AND employees_demas.CSUPERIOR = '$cjob'";
       $result2 = $conn->query($sql2);
       if($row2 = $result2->fetch_assoc()){
-        $cnt = $row2['id'];
+        $cnt = $row2['cid'];
+        $status = 1;
+        $shows = 1;
       }
     }
   }
@@ -501,7 +502,7 @@ if($row = $result->fetch_assoc()){
               </div>
             </div>
           </div>
-          <?php if($emid != '2101-184'){ ?>
+          <?php if($shows == '1'){ if($emid != '2101-184'){ ?>
           <div class="col-6" style="margin-top: 15px;">
             <a href="recommend" class="card load text-dark new-bg">
               <div class="card-body text-center <?php echo ($cnt > 0) ? 'text-danger' : 'text-success'; ?>">
@@ -531,7 +532,7 @@ if($row = $result->fetch_assoc()){
               </div>
             </a>
           </div>
-          <?php } if($emid == '2522-186'){ ?>
+          <?php } } if($emid == '2522-186'){ ?>
           <div class="col-6" style="margin-top: 15px;">
             <a href="index_new" class="card load text-dark new-bg">
               <div class="card-body text-center text-danger">
